@@ -15,6 +15,8 @@
         {
             InitializeComponent();
             this.lstLanguage.SelectedIndex = 0;
+            this.btnPrint.Visible = false;
+            this.progProcess.Visible = false;
         }
 
         private async void btnGenerate_Click(object sender, EventArgs e)
@@ -22,12 +24,14 @@
             this.btnGenerate.Enabled = false;
             this.lblVolumeHint.Visible = true;
             this.progVolume.Visible = true;
+            this.btnPrint.Visible = false;
+            this.progProcess.Visible = true;
 
             using var waveIn = new WaveInEvent();
             waveIn.DataAvailable += OnDataAvailable;
             waveIn.StartRecording();
 
-            var total = 3000; //ms
+            var total = 5000; //ms
 
             for (int i = 0; i < 100; i++)
             {
@@ -47,7 +51,6 @@
                 WordCount.Twelve);
             var hdRoot = this.mnemo.DeriveExtKey(this.txtPassword.Text);
             this.txtMnemonic.Text = this.mnemo.ToString();
-            this.txtBip32RootKey.Text = hdRoot.ToString(Network.TestNet);
 
             this.addresses = Enumerable.Range(1, 3)
                 .Select(num => hdRoot
@@ -60,6 +63,8 @@
             this.lblVolumeHint.Visible = false;
             this.progVolume.Visible = false;
             this.btnGenerate.Enabled = true;
+            this.btnPrint.Visible = true;
+            this.progProcess.Visible = false;
         }
 
         private void OnDataAvailable(object sender, WaveInEventArgs args)
@@ -80,13 +85,16 @@
 
             this.progVolume.Invoke((Action)(() =>
             {
-                this.progVolume.Value = (int)(max * 100);
+                this.progVolume.Value = (int)(Math.Sqrt(max) * 90) + 10;
             }));
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
             new PrintService().Print(this.mnemo.Words, this.addresses, "XP-58");
+            this.btnPrint.Visible = false;
+            this.txtMnemonic.Text = "";
+            this.txtPassword.Text = "";
         }
     }
 }

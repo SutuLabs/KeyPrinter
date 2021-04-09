@@ -106,7 +106,7 @@
             height = DrawText("请将该助记词抄到纸上，并保存在安全的地方", yhnormal, g, yPos, leftMargin + 10, paperWidth, 20);
             yPos += height;
 
-            height = DrawText("====沿此线折叠====", yhnormal, g, yPos, leftMargin + 10, paperWidth, 20);
+            height = DrawText("======沿此线折叠======", yhnormal, g, yPos, leftMargin + 10, paperWidth, 20);
             yPos += height;
 
             int num = 0;
