@@ -8,17 +8,13 @@
 
     public class PrintService
     {
-        private string resultName;
-        private string resultDesc;
-        private double resultSimilarity;
-        private string resultUrl;
+        private string[] resultWords;
+        private string[] resultAddresses;
 
-        public void Print(string name, string desc, double similarity, string url, string defaultPrinter = null)
+        public void Print(string[] words, string[] addresses, string defaultPrinter = null)
         {
-            this.resultName = name;
-            this.resultDesc = desc;
-            this.resultSimilarity = similarity;
-            this.resultUrl = url;
+            this.resultWords = words;
+            this.resultAddresses = addresses;
 
             var pdoc = new PrintDocument();
             pdoc.PrintPage += new PrintPageEventHandler(this.PrintDrawingHandler);
@@ -51,11 +47,10 @@
                     Height = size,
                     Width = size,
                     Margin = margin,
-                    ErrorCorrection = ZXing.QrCode.Internal.ErrorCorrectionLevel.H
+                    //ErrorCorrection = ZXing.QrCode.Internal.ErrorCorrectionLevel.M
                 }
             };
             var pixelData = qrCodeWriter.Write(url);
-            //var pixelData = qrCodeWriter.Write($"http://b.uchaindb.com/#/?a=%5B{ids}%5D&mode=arch");
             var bitmap = new Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             var bitmapData = bitmap.LockBits(
                 new Rectangle(0, 0, pixelData.Width, pixelData.Height),
@@ -79,6 +74,7 @@
             var yhsmall = new Font("Microsoft YaHei", 7);
             var yhnormal = new Font("Microsoft YaHei", 8);
             var yhbig = new Font("Microsoft YaHei", 13);
+            var logo = new Bitmap("logo.png");
 
             var g = ppeArgs.Graphics;
             float yPos = 0;
@@ -93,23 +89,33 @@
 
             var height = 0;
 
-            height = DrawText("与你的选择最相似的是:", yhsmall, g, yPos, leftMargin, paperWidth, 20);
+            g.DrawImage(logo, new RectangleF(0, yPos, logo.Width, logo.Height));
+
+            yPos += logo.Height;
+
+            height = DrawText("助记词:", yhbig, g, yPos, leftMargin, paperWidth, 20);
             yPos += height;
 
-            height = DrawText(this.resultName, yhbig, g, yPos, leftMargin, paperWidth, 20);
+            height = DrawText("您的账户助记词可以帮助您轻松备份和恢复个人账户", yhnormal, g, yPos, leftMargin, paperWidth, 20);
             yPos += height;
 
-            height = DrawText($"相似度：{this.resultSimilarity * 100}%", yhsmall, g, yPos, leftMargin, paperWidth, 20);
+            height = DrawText(string.Join(" ", this.resultWords), yhbig, g, yPos, leftMargin, paperWidth, 20);
             yPos += height;
 
-            height = DrawText(this.resultDesc, yhnormal, g, yPos, leftMargin, 189, 200);
+            height = DrawText("警告：切勿向他人透露您的账户助记词。任何人一旦持有该账户助记词，即可控制您的token", yhsmall, g, yPos, leftMargin + 10, paperWidth, 20);
             yPos += height;
 
-            var qrcode = GenQrCode(qrcodesize, this.resultUrl);
-            g.DrawImage(qrcode, new PointF(leftMargin + (paperWidth - qrcodesize) / 2, yPos));
-            yPos += qrcodesize;
+            height = DrawText("请将该账户助记词记录在纸上，并保存在安全的地方", yhnormal, g, yPos, leftMargin + 10, paperWidth, 20);
+            yPos += height;
 
-            height = DrawText("（扫描二维码查看完整详细的报告） ", yhsmall, g, yPos, leftMargin + 10, paperWidth, 20);
+            //var qrcode = GenQrCode(qrcodesize, this.resultUrl);
+            //g.DrawImage(qrcode, new PointF(leftMargin + (paperWidth - qrcodesize) / 2, yPos));
+            //yPos += qrcodesize;
+
+            height = DrawText("感谢您参与区块链探索沙龙！", yhnormal, g, yPos, leftMargin + 10, paperWidth, 20);
+            yPos += height;
+
+            height = DrawText("技术提供方：上海素图科技有限公司", yhsmall, g, yPos, leftMargin + 10, paperWidth, 20);
             yPos += height;
 
             ppeArgs.HasMorePages = false;
@@ -120,7 +126,7 @@
             var size = TextRenderer.MeasureText(text, font, new Size(width, maxHeight), TextFormatFlags.WordBreak);
             g.DrawString(text, font, Brushes.Black, new RectangleF(x, y, size.Width, size.Height),
                 new StringFormat() { Alignment = alignment });
-            return size.Height;
+            return size.Height / 2;
         }
     }
 
