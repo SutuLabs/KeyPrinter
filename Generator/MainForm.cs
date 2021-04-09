@@ -1,6 +1,7 @@
 ﻿namespace Generator
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using NAudio.Wave;
@@ -9,6 +10,7 @@
     public partial class MainForm : Form
     {
         Mnemonic mnemo;
+        string[] addresses;
         public MainForm()
         {
             InitializeComponent();
@@ -18,6 +20,8 @@
         private async void btnGenerate_Click(object sender, EventArgs e)
         {
             this.btnGenerate.Enabled = false;
+            this.lblVolumeHint.Visible = true;
+            this.progVolume.Visible = true;
 
             using var waveIn = new WaveInEvent();
             waveIn.DataAvailable += OnDataAvailable;
@@ -44,6 +48,17 @@
             var hdRoot = this.mnemo.DeriveExtKey(this.txtPassword.Text);
             this.txtMnemonic.Text = this.mnemo.ToString();
             this.txtBip32RootKey.Text = hdRoot.ToString(Network.TestNet);
+
+            this.addresses = Enumerable.Range(1, 3)
+                .Select(num => hdRoot
+                    .Derive(new KeyPath($"m/84'/1'/0'/0/{num}"))
+                    .GetPublicKey()
+                    .GetAddress(ScriptPubKeyType.Segwit, Network.TestNet)
+                    .ToString())
+                .ToArray();
+
+            this.lblVolumeHint.Visible = false;
+            this.progVolume.Visible = false;
             this.btnGenerate.Enabled = true;
         }
 
@@ -71,7 +86,7 @@
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
-            new PrintService().Print(this.mnemo.Words, new string[] { }, "XP-58");
+            new PrintService().Print(this.mnemo.Words, this.addresses, "XP-58");
         }
     }
 }

@@ -39,6 +39,7 @@
             this.txtBip32RootKey = new System.Windows.Forms.TextBox();
             this.progVolume = new System.Windows.Forms.ProgressBar();
             this.btnPrint = new System.Windows.Forms.Button();
+            this.lblVolumeHint = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnGenerate
@@ -114,6 +115,7 @@
             this.label2.Size = new System.Drawing.Size(114, 32);
             this.label2.TabIndex = 3;
             this.label2.Text = "根密码：";
+            this.label2.Visible = false;
             // 
             // txtBip32RootKey
             // 
@@ -125,6 +127,7 @@
             this.txtBip32RootKey.Name = "txtBip32RootKey";
             this.txtBip32RootKey.Size = new System.Drawing.Size(1239, 36);
             this.txtBip32RootKey.TabIndex = 4;
+            this.txtBip32RootKey.Visible = false;
             // 
             // progVolume
             // 
@@ -135,6 +138,7 @@
             this.progVolume.Name = "progVolume";
             this.progVolume.Size = new System.Drawing.Size(600, 49);
             this.progVolume.TabIndex = 2;
+            this.progVolume.Visible = false;
             // 
             // btnPrint
             // 
@@ -147,11 +151,22 @@
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
             // 
+            // lblVolumeHint
+            // 
+            this.lblVolumeHint.AutoSize = true;
+            this.lblVolumeHint.Location = new System.Drawing.Point(562, 34);
+            this.lblVolumeHint.Name = "lblVolumeHint";
+            this.lblVolumeHint.Size = new System.Drawing.Size(289, 32);
+            this.lblVolumeHint.TabIndex = 6;
+            this.lblVolumeHint.Text = "通过您的声音来提高熵：";
+            this.lblVolumeHint.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1486, 960);
+            this.Controls.Add(this.lblVolumeHint);
             this.Controls.Add(this.lstLanguage);
             this.Controls.Add(this.txtBip32RootKey);
             this.Controls.Add(this.label2);
@@ -182,6 +197,7 @@
         private System.Windows.Forms.TextBox txtBip32RootKey;
         private System.Windows.Forms.ProgressBar progVolume;
         private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Label lblVolumeHint;
     }
 }
 
