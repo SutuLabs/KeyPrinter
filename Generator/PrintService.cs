@@ -118,7 +118,6 @@
 
                 var qrcode = GenQrCode(qrcodesize, address);
                 g.DrawImage(qrcode, new RectangleF(leftMargin + (paperWidth - qrcodesize) / 2, yPos, qrcodesize, qrcodesize));
-                qrcode.Save("test.png");
                 yPos += qrcodesize;
             }
 
