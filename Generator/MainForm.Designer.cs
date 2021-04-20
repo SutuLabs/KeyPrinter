@@ -155,7 +155,7 @@
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnGenerate);
             this.Name = "MainForm";
-            this.Text = "素图科技——纸钱包";
+            this.Text = "区块链纸钱包生成软件";
             this.ResumeLayout(false);
             this.PerformLayout();
 

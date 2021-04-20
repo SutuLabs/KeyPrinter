@@ -56,7 +56,7 @@
                 .Select(num => hdRoot
                     .Derive(new KeyPath($"m/84'/1'/0'/0/{num}"))
                     .GetPublicKey()
-                    .GetAddress(ScriptPubKeyType.Segwit, Network.TestNet)
+                    .GetAddress(ScriptPubKeyType.Segwit, Network.Main)
                     .ToString())
                 .ToArray();
 
